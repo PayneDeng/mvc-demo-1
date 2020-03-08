@@ -11014,6 +11014,11 @@ return jQuery;
 },{"process":"../../../../.config/yarn/global/node_modules/process/browser.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 require("./app1.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11024,23 +11029,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var m = {
   data: {
     // 初始化数据
-    n: localStorage.getItem('n')
+    n: parseInt(localStorage.getItem('n'))
   }
 }; // 视图相关的都放到v
 
 var v = {
-  html: "\n<section id=\"app1\">\n        <div class=\"output\">\n          <span id=\"number\">100</span>\n        </div>\n        <div class=\"actions\">\n          <button id=\"add1\">+1</button>\n          <button id=\"minus1\">-1</button>\n          <button id=\"mul2\">*2</button>\n          <button id=\"divide2\">\xF72</button>\n        </div>\n      </section>\n",
-  update: function update() {
-    // 将数据渲染到页面
-    c.ui.number.text(m.data.n || 100);
-  },
-  render: function render() {
-    var $element = (0, _jquery.default)(v.html).appendTo((0, _jquery.default)('body>.page'));
+  el: null,
+  html: "\n<div>\n        <div class=\"output\">\n          <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n          <button id=\"add1\">+1</button>\n          <button id=\"minus1\">-1</button>\n          <button id=\"mul2\">*2</button>\n          <button id=\"divide2\">\xF72</button>\n        </div>\n </div>\n",
+  render: function render(container) {
+    if (v.el === null) {
+      v.el = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n)).appendTo((0, _jquery.default)(container));
+    } else {
+      var newEL = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n));
+      v.el.replaceWith(newEL);
+      v.el = newEL;
+    }
   }
 }; // 其他都c
 
 var c = {
-  init: function init() {
+  init: function init(container) {
+    // 第一次渲染html
+    v.render(container);
     c.ui = {
       // 寻找重要的元素
       button1: (0, _jquery.default)('#add1'),
@@ -11054,10 +11064,8 @@ var c = {
   bindEvent: function bindEvent() {
     // 绑定鼠标事件
     c.ui.button1.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n += 1;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
+      m.data.n += 1;
+      v.render();
     });
     c.ui.button2.on('click', function () {
       var n = parseInt(c.ui.number.text());
@@ -11078,10 +11086,9 @@ var c = {
       c.ui.number.text(n);
     });
   }
-}; // 第一次渲染html
-
-v.render();
-c.init();
+};
+var _default = c;
+exports.default = _default;
 },{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
@@ -11169,13 +11176,17 @@ require("./reset.css");
 
 require("./global.css");
 
-require("./app1.js");
+var _app = _interopRequireDefault(require("./app1.js"));
 
 require("./app2.js");
 
 require("./app3.js");
 
 require("./app4.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_app.default.init('#app1');
 },{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"../../../../.config/yarn/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -11204,7 +11215,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58433" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60748" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
