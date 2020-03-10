@@ -1,6 +1,5 @@
 import './app1.css'
 import $ from 'jquery'
-
 // 数据相关的都放到m
 const m = {
     data: {
@@ -24,58 +23,51 @@ const v = {
         </div>
  </div>
 `,
-    render(container) {
-        if (v.el === null) {
-            v.el = $(v.html.replace('{{n}}', m.data.n))
-                .appendTo($(container))
-        }else{
-            const newEL = $(v.html.replace('{{n}}', m.data.n))
-            v.el.replaceWith(newEL)
-            v.el = newEL
-        }
+    init(container) {
+        v.el = $(container)
+    },
+    // 重要代码
+    render(n) {
+        if (v.el.children.length !== 0) v.el.empty()
+        $(v.html.replace('{{n}}', n))
+            .appendTo(v.el)
+
     }
+    // 重要代码
 }
 // 其他都c
-
 const c = {
-
     init(container) {
         // 第一次渲染html
-        v.render(container)
-        c.ui = {
-// 寻找重要的元素
-            button1: $('#add1'),
-            button2: $('#minus1'),
-            button3: $('#mul2'),
-            button4: $('#divide2'),
-            number: $('#number'),
-        }
-        c.bindEvent()
+        v.init(container)
+        v.render(m.data.n) // view = render(data)
+        c.autoBindEvents()
     },
-    bindEvent() {
-// 绑定鼠标事件
-        c.ui.button1.on('click', () => {
-            m.data.n += 1
-            v.render()
-        })
-        c.ui.button2.on('click', () => {
-            let n = parseInt(c.ui.number.text())
-            n -= 1
-            localStorage.setItem('n', n)
-            c.ui.number.text(n)
-        })
-        c.ui.button3.on('click', () => {
-            let n = parseInt(c.ui.number.text())
-            n *= 2
-            localStorage.setItem('n', n)
-            c.ui.number.text(n)
-        })
-        c.ui.button4.on('click', () => {
-            let n = parseInt(c.ui.number.text())
-            n /= 2
-            localStorage.setItem('n', n)
-            c.ui.number.text(n)
-        })
+    events: {
+        'click #add1': 'add',
+        'click #minus1': 'minus',
+        'click #mul2': 'mul',
+        'click #divide2': 'divide'
+    },
+    add() {
+        m.data.n += 1
+    },
+    minus() {
+        m.data.n -= 1
+    },
+    mul() {
+        m.data.n *= 2
+    },
+    divide() {
+        m.data.n /= 2
+    },
+    autoBindEvents(){
+        for (let key in c.events){
+            const spaceIndex = key.indexOf(' ')
+const part1 = key.slice(0,spaceIndex)
+            const part2 = key.slice(spaceIndex)
+            console.log(part1, ',' , part2)
+        }
     }
 }
 

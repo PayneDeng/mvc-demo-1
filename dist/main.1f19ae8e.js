@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../.config/yarn/global/node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,22 +184,22 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/bundle-url.js"}],"reset.css":[function(require,module,exports) {
+},{"./bundle-url":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/bundle-url.js"}],"reset.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js"}],"global.css":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"global.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js"}],"app1.css":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app1.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js"}],"../../../../.config/yarn/global/node_modules/process/browser.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -11011,7 +11011,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{"process":"../../../../.config/yarn/global/node_modules/process/browser.js"}],"app1.js":[function(require,module,exports) {
+},{"process":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11036,55 +11036,50 @@ var m = {
 var v = {
   el: null,
   html: "\n<div>\n        <div class=\"output\">\n          <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n          <button id=\"add1\">+1</button>\n          <button id=\"minus1\">-1</button>\n          <button id=\"mul2\">*2</button>\n          <button id=\"divide2\">\xF72</button>\n        </div>\n </div>\n",
-  render: function render(container) {
-    if (v.el === null) {
-      v.el = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n)).appendTo((0, _jquery.default)(container));
-    } else {
-      var newEL = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n));
-      v.el.replaceWith(newEL);
-      v.el = newEL;
-    }
-  }
+  init: function init(container) {
+    v.el = (0, _jquery.default)(container);
+  },
+  // 重要代码
+  render: function render(n) {
+    if (v.el.children.length !== 0) v.el.empty();
+    (0, _jquery.default)(v.html.replace('{{n}}', n)).appendTo(v.el);
+  } // 重要代码
+
 }; // 其他都c
 
 var c = {
   init: function init(container) {
     // 第一次渲染html
-    v.render(container);
-    c.ui = {
-      // 寻找重要的元素
-      button1: (0, _jquery.default)('#add1'),
-      button2: (0, _jquery.default)('#minus1'),
-      button3: (0, _jquery.default)('#mul2'),
-      button4: (0, _jquery.default)('#divide2'),
-      number: (0, _jquery.default)('#number')
-    };
-    c.bindEvent();
+    v.init(container);
+    v.render(m.data.n); // view = render(data)
+
+    c.autoBindEvents();
   },
-  bindEvent: function bindEvent() {
-    // 绑定鼠标事件
-    c.ui.button1.on('click', function () {
-      m.data.n += 1;
-      v.render();
-    });
-    c.ui.button2.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n -= 1;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
-    });
-    c.ui.button3.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n *= 2;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
-    });
-    c.ui.button4.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n /= 2;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
-    });
+  events: {
+    'click #add1': 'add',
+    'click #minus1': 'minus',
+    'click #mul2': 'mul',
+    'click #divide2': 'divide'
+  },
+  add: function add() {
+    m.data.n += 1;
+  },
+  minus: function minus() {
+    m.data.n -= 1;
+  },
+  mul: function mul() {
+    m.data.n *= 2;
+  },
+  divide: function divide() {
+    m.data.n /= 2;
+  },
+  autoBindEvents: function autoBindEvents() {
+    for (var key in c.events) {
+      var spaceIndex = key.indexOf(' ');
+      var part1 = key.slice(0, spaceIndex);
+      var part2 = key.slice(spaceIndex);
+      console.log(part1, ',', part2);
+    }
   }
 };
 var _default = c;
@@ -11094,7 +11089,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js"}],"app2.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app2.js":[function(require,module,exports) {
 "use strict";
 
 require("./app2.css");
@@ -11122,7 +11117,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js"}],"app3.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app3.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11152,7 +11147,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../.config/yarn/global/node_modules/parcel/src/builtins/css-loader.js"}],"app4.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app4.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11187,7 +11182,7 @@ require("./app4.js");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _app.default.init('#app1');
-},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"../../../../.config/yarn/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -11215,7 +11210,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60748" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60425" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -11391,5 +11386,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../.config/yarn/global/node_modules/parcel/src/builtins/hmr-runtime.js","main.js"], null)
+},{}]},{},["C:/Users/payne/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js","main.js"], null)
 //# sourceMappingURL=/main.1f19ae8e.js.map
