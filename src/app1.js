@@ -61,12 +61,13 @@ const c = {
     divide() {
         m.data.n /= 2
     },
-    autoBindEvents(){
-        for (let key in c.events){
+    autoBindEvents() {
+        for (let key in c.events) {
+            const value = c[c.events[key]]
             const spaceIndex = key.indexOf(' ')
-const part1 = key.slice(0,spaceIndex)
-            const part2 = key.slice(spaceIndex)
-            console.log(part1, ',' , part2)
+            const part1 = key.slice(0, spaceIndex)
+            const part2 = key.slice(spaceIndex + 1)
+            console.log(part1, ',', part2, value)
         }
     }
 }
