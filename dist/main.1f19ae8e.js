@@ -11025,12 +11025,20 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// 数据相关的都放到m
+var eventBus = (0, _jquery.default)({}); // 数据相关的都放到m
+
 var m = {
   data: {
     // 初始化数据
     n: parseInt(localStorage.getItem('n'))
-  }
+  },
+  create: function create() {},
+  delete: function _delete() {},
+  update: function update(data) {
+    Object.assign(m.data, data);
+    eventBus.trigger('m updated');
+  },
+  get: function get() {}
 }; // 视图相关的都放到v
 
 var v = {
@@ -11054,6 +11062,9 @@ var c = {
     v.render(m.data.n); // view = render(data)
 
     c.autoBindEvents();
+    eventBus.on('m updated', function () {
+      v.render(m.data.n);
+    });
   },
   events: {
     'click #add1': 'add',
@@ -11062,23 +11073,32 @@ var c = {
     'click #divide2': 'divide'
   },
   add: function add() {
-    m.data.n += 1;
+    m.update({
+      n: m.data.n + 1
+    });
   },
   minus: function minus() {
-    m.data.n -= 1;
+    m.update({
+      n: m.data.n - 1
+    });
   },
   mul: function mul() {
-    m.data.n *= 2;
+    m.update({
+      n: m.data.n * 2
+    });
   },
   divide: function divide() {
-    m.data.n /= 2;
+    m.update({
+      n: m.data.n / 2
+    });
   },
   autoBindEvents: function autoBindEvents() {
     for (var key in c.events) {
+      var value = c[c.events[key]];
       var spaceIndex = key.indexOf(' ');
       var part1 = key.slice(0, spaceIndex);
-      var part2 = key.slice(spaceIndex);
-      console.log(part1, ',', part2);
+      var part2 = key.slice(spaceIndex + 1);
+      console.log(part1, ',', part2, value);
     }
   }
 };
@@ -11210,7 +11230,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60425" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62933" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

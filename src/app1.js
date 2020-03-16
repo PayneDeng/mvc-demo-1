@@ -1,10 +1,22 @@
 import './app1.css'
 import $ from 'jquery'
+
+const eventBus = $({})
 // 数据相关的都放到m
 const m = {
     data: {
         // 初始化数据
         n: parseInt(localStorage.getItem('n'))
+    },
+    create() {
+    },
+    delete() {
+    },
+    update(data) {
+        Object.assign(m.data, data)
+        eventBus.trigger('m updated')
+    },
+    get() {
     }
 }
 // 视图相关的都放到v
@@ -31,7 +43,6 @@ const v = {
         if (v.el.children.length !== 0) v.el.empty()
         $(v.html.replace('{{n}}', n))
             .appendTo(v.el)
-
     }
     // 重要代码
 }
@@ -42,6 +53,9 @@ const c = {
         v.init(container)
         v.render(m.data.n) // view = render(data)
         c.autoBindEvents()
+        eventBus.on('m updated', () => {
+            v.render(m.data.n)
+        })
     },
     events: {
         'click #add1': 'add',
@@ -50,16 +64,16 @@ const c = {
         'click #divide2': 'divide'
     },
     add() {
-        m.data.n += 1
+        m.update({n: m.data.n + 1})
     },
     minus() {
-        m.data.n -= 1
+        m.update({n: m.data.n - 1})
     },
     mul() {
-        m.data.n *= 2
+        m.update({n: m.data.n * 2})
     },
     divide() {
-        m.data.n /= 2
+        m.update({n: m.data.n / 2})
     },
     autoBindEvents() {
         for (let key in c.events) {
